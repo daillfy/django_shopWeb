@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+{{ product.name }}
+{% endblock %}
+{% block content %}
+<div class="product-detail">
+    <img src="{% if product.image %}{{ product.image.url }}
+    {% else %}{% static "image/no_image.jpg" %}
+    {% endif %} " alt="">
+<h1>{{ product.name }}</h1>
+<h2><a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a></h2>
+<p class="price">${{ product.price }}</p>
+{# 在商品的价格后面添加一个加入到购物车的选项 #}
+<form action="{% url 'cart:cart_add' product.id%}" method="post">
+        {%csrf_token%}
+    {{ cart_product_form }} {# 购物车添加表单 #}
+    <input type="submit" value="add to cart">
+</form>
+{{ product.description|linebreaks}}
+</div>
+{% endblock %}

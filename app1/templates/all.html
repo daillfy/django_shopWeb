@@ -1,0 +1,43 @@
+{% extends 'base.html' %}  {# 继承模板 #}
+{% load static %} {# 导入静态路径里面的文件 #}
+{% block title %}
+{% if category %}
+    {{ category.name }}
+{% else %}
+    Products
+{% endif %}
+{% endblock %}
+{% block content %}
+    <div id="sidebar">
+    <h3>Categories</h3>
+    <ul>
+    {#   not category表示查询所有的#}
+        <li {% if not category %}class="selected" {% endif %}>
+            <a href="{% url "app1:all" %}">All</a>
+        </li>
+    {% for c in categories %} {# 表示查询某一个类别的所有商品 #}
+        <li {% if category.slug == c.slug %}class="selected" {% endif %} >
+            <a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+        </li>
+    {% endfor %}
+    </ul>
+    </div>
+    <div id="main" class="product-list">
+    <h1>{% if category %}
+    {{ category.name }}
+    {% else%}Products
+    {% endif %} </h1>
+    {% for p in products %}
+    <div class="item">
+        <a href="{{ p.get_absolute_url}}">
+            <img src="{% if p.image %}{{ p.image.url }}{% else %}{% static "image/no_image.jpg" %}{% endif %}" alt="">
+        </a>
+    {# get_absolute_url，二级路由，可用直接跳转  #}
+        <a href="{{ p.get_absolute_url}}">{{ p.name }}</a><br>
+    ${{ p.price }}
+    </div>
+    {% endfor %}
+
+    </div>
+{% endblock %}
+{# 由于使用了Imagefield，还需要对媒体文件进行一些设置，编辑settings.py文件加入下列内容： #}

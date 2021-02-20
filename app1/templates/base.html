@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{# 创建模板页，让其他模板继承或者重写 #}
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+        My Shop
+        {% endblock %}
+    </title>
+    <link rel="stylesheet" href="{% static "css/base.css" %}">
+    <link rel="stylesheet" href="{% static 'layui/css/layui.css' %}">
+</head>
+<body>
+    <div id="header">
+        <a href="/" class='logo'>My Shop</a>
+    </div>
+    <div id="subheader">
+        <div class="cart">
+            {% with total_items=cart|length %}
+            {% if  cart|length > 0%}
+               <span class="layui-icon layui-icon-cart"></span>:
+                <a href="{%  url 'cart:cart_detail' %}">{{ total_items }}items{{ total_items|pluralize }}</a>
+            {% else %}Your cart is empty
+            {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+    <div id="content">
+        {% block content %}
+        
+        {% endblock %}
+    </div>
+</body>
+</html>
